@@ -70,7 +70,7 @@ The Salary Prediction platform provides real-time salary estimations by analyzin
 ## 📈 Model
 
 - The regression model is trained using the data in `Salary_Data.csv`.
-- Code for training and prediction is found in the Python backend script (`main.py` or your script filename).
+- Code for training and prediction is found in the Python backend script (`model.py` or your script filename).
 
 ## 🙌 Contributing
 
