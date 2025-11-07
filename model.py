@@ -21,7 +21,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 app = Flask(__name__)
 
 # Load dataset (use raw string for file path)
-data = pd.read_csv(r"IBM_PBEL\Project-2\DATASET\Salary_Data.csv")
+data = pd.read_csv(r"dataset/Salary_Data.csv")
 
 # Drop rows with missing target or features
 required_cols = ["Salary", "Age", "Gender", "Education Level", "Job Title", "Years of Experience"]
@@ -184,3 +184,4 @@ def predict():
 
 if __name__ == "__main__":
     app.run(debug=False)
+
