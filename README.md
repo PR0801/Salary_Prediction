@@ -28,16 +28,7 @@ The Salary Prediction platform provides real-time salary estimations by analyzin
 .
 ## 🔗 Project Structure
 
-```
-.
-├── dataset/          # Stores datasets
-│   ├── Salary_Data.csv
-├── template/         # Stores HTML or template files for the frontend
-│   └── index.html    # Main web user interface
-├── model.py          # Python backend script
-├── requirements.txt  #Requirements for running the project
-└── README.md         # Project documentation (this file)
-```
+<pre> ```bash . ├── dataset/ # Stores datasets │ └── Salary_Data.csv ├── template/ # Stores HTML or template files for the frontend │ └── index.html # Main web user interface ├── model.py # Python backend script ├── requirements.txt # Requirements for running the project └── README.md # Project documentation (this file) ``` </pre>
 ```
 
 ## 🚀 Getting Started
