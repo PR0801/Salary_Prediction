@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Salary Prediction App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 16px;
+      }
+      .input-row {
+        margin-bottom: 10px;
+      }
+      label {
+        width: 200px;
+        display: inline-block;
+      }
+      .container {
+        max-width: 900px;
+        margin: auto;
+      }
+      .plots {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px; /* space between images */
+      }
+
+      .plots img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      button {
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Salary Prediction using Voting Regressor</h1>
+
+      <form id="salary-form" autocomplete="off">
+        <div class="input-row">
+          <label>Age:</label>
+          <input name="Age" type="number" required min="18" step="1" />
+        </div>
+        <div class="input-row">
+          <label>Gender:</label>
+          <select name="Gender" required>
+            <option value="" disabled selected>Select</option>
+            <option>Female</option>
+            <option>Male</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <label>Education Level:</label>
+          <select name="Education_Level" required>
+            <option value="" disabled selected>Select</option>
+            <option>Bachelor's</option>
+            <option>Master's</option>
+            <option>PhD</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <label>Job Title:</label>
+          <select name="Job_Title" required>
+            <option value="" disabled selected>Select</option>
+            <option>Accountant</option>
+            <option>Business Analyst</option>
+            <option>Chief Data Officer</option>
+            <option>Chief Technology Officer</option>
+            <option>Data Scientist</option>
+            <option>Director</option>
+            <option>Director of Engineering</option>
+            <option>Director of Finance</option>
+            <option>Director of HR</option>
+            <option>Director of Human Capital</option>
+            <option>Director of Human Resources</option>
+            <option>Director of Marketing</option>
+            <option>Director of Operations</option>
+            <option>Director of Product Management</option>
+            <option>Director of Sales</option>
+            <option>Director of Sales and Marketing</option>
+            <option>Operations Director</option>
+            <option>Research Director</option>
+            <option>Sales Director</option>
+            <option>Software Engineer</option>
+            <option>VP of Finance</option>
+            <option>VP of Operations</option>
+            <option>CEO</option>
+            <option>Human Resources Director</option>
+          </select>
+        </div>
+
+        <div class="input-row">
+          <label>Years of Experience:</label>
+          <input
+            name="Years_of_Experience"
+            type="number"
+            required
+            min="0"
+            step="1"
+          />
+        </div>
+        <button type="submit">Predict Salary</button>
+      </form>
+
+      <h2 id="result"></h2>
+      <hr />
+      <h3>Model Analysis & Graphs:</h3>
+      <div class="plots">
+        <img
+          src="data:image/png;base64,{{ plots['salary_distribution'] }}"
+          alt="Salary Distribution"
+        />
+        <img
+          src="data:image/png;base64,{{ plots['correlation_heatmap'] }}"
+          alt="Correlation Heatmap"
+        />
+        <img
+          src="data:image/png;base64,{{ plots['salary_vs_age'] }}"
+          alt="Salary vs Age"
+        />
+        <img
+          src="data:image/png;base64,{{ plots['salary_vs_experience'] }}"
+          alt="Salary vs Experience"
+        />
+        <img
+          src="data:image/png;base64,{{ plots['actual_vs_predicted'] }}"
+          alt="Actual vs Predicted Salaries"
+        />
+        <img
+          src="data:image/png;base64,{{ plots['residuals_distribution'] }}"
+          alt="Residuals Distribution"
+        />
+        <img
+          src="data:image/png;base64,{{ plots['salary_by_education'] }}"
+          alt="Salary by Education Level"
+        />
+        <img
+          src="data:image/png;base64,{{ plots['avg_salary_by_job'] }}"
+          alt="Average Salary by Job Title"
+        />
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("salary-form").onsubmit = async function (e) {
+        e.preventDefault();
+        let formData = Object.fromEntries(new FormData(e.target).entries());
+
+        // Convert numeric fields
+        formData["Age"] = Number(formData["Age"]);
+        formData["Years_of_Experience"] = Number(
+          formData["Years_of_Experience"]
+        );
+
+        // Validation by degree
+        const minAge = { "Bachelor's": 21, "Master's": 23, PhD: 26 };
+        if (
+          !formData["Age"] ||
+          !formData["Gender"] ||
+          !formData["Education_Level"] ||
+          !formData["Job_Title"] ||
+          formData["Years_of_Experience"] === ""
+        ) {
+          document.getElementById("result").textContent =
+            "Please fill all fields correctly.";
+          return;
+        }
+        if (formData["Age"] < minAge[formData["Education_Level"]]) {
+          document.getElementById("result").textContent = `Minimum age for ${
+            formData["Education_Level"]
+          } is ${minAge[formData["Education_Level"]]}.`;
+          return;
+        }
+        if (
+          formData["Years_of_Experience"] >
+          formData["Age"] - minAge[formData["Education_Level"]]
+        ) {
+          document.getElementById("result").textContent =
+            "Invalid input: experience exceeds allowed range.";
+          return;
+        }
+
+        // Make prediction
+        try {
+          let res = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
+          let json = await res.json();
+          if (res.ok && json.predicted_salary !== undefined) {
+            document.getElementById("result").textContent =
+              "Predicted Salary: $" + json.predicted_salary;
+          } else if (json.error) {
+            document.getElementById("result").textContent =
+              "Error: " + json.error;
+          } else {
+            document.getElementById("result").textContent =
+              "Prediction failed. Try again.";
+          }
+        } catch (err) {
+          document.getElementById("result").textContent =
+            "Could not connect to server.";
+        }
+      };
+    </script>
+  </body>
+</html>
