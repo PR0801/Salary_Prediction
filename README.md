@@ -26,14 +26,18 @@ The Salary Prediction platform provides real-time salary estimations by analyzin
 
 ```
 .
-├── dataset/          # Stores datasets such as Salary_Data.csv
+## 🔗 Project Structure
+
+```
+.
+├── dataset/          # Stores datasets
 │   ├── Salary_Data.csv
-│   └── index.txt
-├── template/         # (Optional) Stores HTML or template files for the frontend
-│   └── README.md
-├── main.py           # (Example) Python backend script
-├── index.html        # Main web user interface
-└── README.md         # This file
+├── template/         # Stores HTML or template files for the frontend
+│   └── index.html    # Main web user interface
+├── model.py          # Python backend script
+├── requirements.txt  #Requirements for running the project
+└── README.md         # Project documentation (this file)
+```
 ```
 
 ## 🚀 Getting Started
@@ -52,12 +56,12 @@ The Salary Prediction platform provides real-time salary estimations by analyzin
 
 3. **Run the app:**
    ```sh
-   python main.py
+   python model.py
    ```
    or use your workflow (Flask, FastAPI, etc.)
 
 4. **Open the front-end:**  
-   Access `index.html` in your browser/hosted environment.
+   Access `template/index.html` in your browser/hosted environment.
 
 ## 💾 Dataset
 
