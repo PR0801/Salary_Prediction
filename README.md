@@ -64,7 +64,7 @@ The Salary Prediction platform provides real-time salary estimations by analyzin
 
 ## Dataset
 
--Kaggle Link of Dataset - https://www.kaggle.com/datasets/mubeenshehzadi/salary-dataset
+- Kaggle Link of Dataset - https://www.kaggle.com/datasets/mubeenshehzadi/salary-dataset
 - The core dataset is stored in `dataset/Salary_Data.csv`.
 - Place additional data files in the `dataset/` folder as needed.
 
