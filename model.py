@@ -1,13 +1,11 @@
 import warnings
 warnings.filterwarnings("ignore")
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import base64
 from io import BytesIO
 from flask import Flask, request, jsonify, render_template
-
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
