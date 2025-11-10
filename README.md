@@ -5,16 +5,16 @@ Predict employee salaries using several features (age, gender, years of experien
 
 ## Table of Contents
 
-* [Project Overview](#project-overview)
-* [Problem Statement](#problem-statement)
-* [Dataset](#dataset)
-* [Features](#features)
-* [Methodology](#methodology)
-* [Evaluation](#evaluation)
-* [Usage](#usage)
-* [Project Structure](#project-structure)
-* [Future Enhancements](#future-enhancements)
-* [Licensing & Attribution](#licensing-&-attribution)
+- [Project Overview](#project-overview)
+- [Problem Statement](#problem-statement)
+- [Dataset](#dataset)
+- [Features](#features)
+- [Methodology](#methodology)
+- [Evaluation](#evaluation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Future Enhancements](#future-enhancements)
+- [Licensing & Attribution](#licensing-&-attribution)
 
 ---
 
