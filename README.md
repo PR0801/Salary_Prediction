@@ -14,7 +14,8 @@ Predict employee salaries using several features (age, gender, years of experien
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Future Enhancements](#future-enhancements)
-- [Licensing & Attribution](#licensing-&-attribution)
+- [Licensing & Attribution](#licensing--attribution)
+
 
 ---
 
