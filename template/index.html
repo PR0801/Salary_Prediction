@@ -2,213 +2,394 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Salary Prediction App</title>
+    <title>Salary Predictor</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 16px;
-      }
-      .input-row {
-        margin-bottom: 10px;
-      }
-      label {
-        width: 200px;
-        display: inline-block;
-      }
-      .container {
-        max-width: 900px;
-        margin: auto;
-      }
-      .plots {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px; /* space between images */
+      :root {
+        --primary: #6366f1;
+        --accent: #38bdf8;
+        --white: #f8fafc;
       }
 
-      .plots img {
+      body {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        background: radial-gradient(circle at top left, #1e3a8a, #0f172a 70%);
+        color: var(--white);
+        min-height: 100vh;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 30px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .menu-btn {
+        width: 32px;
+        height: 22px;
+        position: relative;
+        cursor: pointer;
+      }
+      .menu-btn span {
+        position: absolute;
         width: 100%;
-        height: auto;
+        height: 3px;
+        background: white;
+        transition: 0.3s ease;
+      }
+      .menu-btn span:nth-child(1) {
+        top: 0;
+      }
+      .menu-btn span:nth-child(2) {
+        top: 9px;
+      }
+      .menu-btn span:nth-child(3) {
+        bottom: 0;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100%;
+        width: 250px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        transition: 0.4s ease;
+        padding-top: 80px;
+      }
+      .sidebar.active {
+        left: 0;
+      }
+      .sidebar a {
         display: block;
+        padding: 16px 30px;
+        color: white;
+        text-decoration: none;
+        transition: 0.3s;
+        border-left: 3px solid transparent;
+      }
+      .sidebar a.active,
+      .sidebar a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-left-color: var(--accent);
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .panel {
+        max-width: 480px;
+        margin: auto;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        backdrop-filter: blur(16px);
+        padding: 35px;
+      }
+
+      header h1,
+      .panel h2,
+      h2 {
+        background: linear-gradient(90deg, var(--accent), var(--primary));
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+      }
+
+      form {
+        display: grid;
+        gap: 18px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        color: #cbd5e1;
+      }
+
+      input,
+      select {
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+
+      /* FIX DROPDOWN VISIBILITY */
+      select option {
+        background: #1e293b !important;
+        color: #f8fafc !important;
+      }
+      select option:hover,
+      select option:checked {
+        background: #3b82f6 !important;
+        color: white !important;
       }
 
       button {
-        padding: 8px 16px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: 10px;
+        padding: 14px;
+        font-weight: 600;
         cursor: pointer;
+        color: white;
+        border: none;
+      }
+
+      #result {
+        margin-top: 14px;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      /* ✅ SHOW GRAPHS IN 2 PER ROW */
+      .plots {
+        display: grid;
+        gap: 24px;
+        margin-top: 30px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @media (min-width: 500px) {
+        .plots {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 499px) {
+        .plots {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ✅ INCREASE GRAPH SIZE */
+      .plot-card {
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 14px;
+      }
+      .plot-card img {
+        width: 100%;
+        height: 320px;
+        object-fit: contain;
       }
     </style>
   </head>
+
   <body>
-    <div class="container">
-      <h1>Salary Prediction using Voting Regressor</h1>
-
-      <form id="salary-form" autocomplete="off">
-        <div class="input-row">
-          <label>Age:</label>
-          <input name="Age" type="number" required min="18" step="1" />
-        </div>
-        <div class="input-row">
-          <label>Gender:</label>
-          <select name="Gender" required>
-            <option value="" disabled selected>Select</option>
-            <option>Female</option>
-            <option>Male</option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label>Education Level:</label>
-          <select name="Education_Level" required>
-            <option value="" disabled selected>Select</option>
-            <option>Bachelor's</option>
-            <option>Master's</option>
-            <option>PhD</option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label>Job Title:</label>
-          <select name="Job_Title" required>
-            <option value="" disabled selected>Select</option>
-            <option>Accountant</option>
-            <option>Business Analyst</option>
-            <option>Chief Data Officer</option>
-            <option>Chief Technology Officer</option>
-            <option>Data Scientist</option>
-            <option>Director</option>
-            <option>Director of Engineering</option>
-            <option>Director of Finance</option>
-            <option>Director of HR</option>
-            <option>Director of Human Capital</option>
-            <option>Director of Human Resources</option>
-            <option>Director of Marketing</option>
-            <option>Director of Operations</option>
-            <option>Director of Product Management</option>
-            <option>Director of Sales</option>
-            <option>Director of Sales and Marketing</option>
-            <option>Operations Director</option>
-            <option>Research Director</option>
-            <option>Sales Director</option>
-            <option>Software Engineer</option>
-            <option>VP of Finance</option>
-            <option>VP of Operations</option>
-            <option>CEO</option>
-            <option>Human Resources Director</option>
-          </select>
-        </div>
-
-        <div class="input-row">
-          <label>Years of Experience:</label>
-          <input
-            name="Years_of_Experience"
-            type="number"
-            required
-            min="0"
-            step="1"
-          />
-        </div>
-        <button type="submit">Predict Salary</button>
-      </form>
-
-      <h2 id="result"></h2>
-      <hr />
-      <h3>Model Analysis & Graphs:</h3>
-      <div class="plots">
-        <img
-          src="data:image/png;base64,{{ plots['salary_distribution'] }}"
-          alt="Salary Distribution"
-        />
-        <img
-          src="data:image/png;base64,{{ plots['correlation_heatmap'] }}"
-          alt="Correlation Heatmap"
-        />
-        <img
-          src="data:image/png;base64,{{ plots['salary_vs_age'] }}"
-          alt="Salary vs Age"
-        />
-        <img
-          src="data:image/png;base64,{{ plots['salary_vs_experience'] }}"
-          alt="Salary vs Experience"
-        />
-        <img
-          src="data:image/png;base64,{{ plots['actual_vs_predicted'] }}"
-          alt="Actual vs Predicted Salaries"
-        />
-        <img
-          src="data:image/png;base64,{{ plots['residuals_distribution'] }}"
-          alt="Residuals Distribution"
-        />
-        <img
-          src="data:image/png;base64,{{ plots['salary_by_education'] }}"
-          alt="Salary by Education Level"
-        />
-        <img
-          src="data:image/png;base64,{{ plots['avg_salary_by_job'] }}"
-          alt="Average Salary by Job Title"
-        />
+    <header>
+      <div class="menu-btn" id="menu-btn">
+        <span></span><span></span><span></span>
       </div>
+      <h1>Salary Predictor</h1>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+      <a href="#" id="dashboard-link" class="active">🏠 Dashboard</a>
+      <a href="#" id="analytics-link">📊 Analytics</a>
+    </div>
+
+    <div class="content">
+      <section id="dashboard">
+        <div class="panel">
+          <h2>Predict Salary</h2>
+          <h3>Enter details to get Salary estimate</h3>
+
+          <form id="salary-form">
+            <div class="form-group">
+              <label>Age</label>
+              <input name="Age" type="number" required min="18" />
+            </div>
+
+            <div class="form-group">
+              <label>Gender</label>
+              <select name="Gender" required>
+                <option value="" disabled selected>Select gender</option>
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Education Level</label>
+              <select name="Education_Level" required>
+                <option value="" disabled selected>Select education</option>
+                <option>Bachelor's</option>
+                <option>Master's</option>
+                <option>PhD</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Job Title</label>
+              <select name="Job_Title" required>
+                <option value="" disabled selected>Select job</option>
+                <option>Software Engineer</option>
+                <option>Data Analyst</option>
+                <option>Senior Manager</option>
+                <option>Sales Associate</option>
+                <option>Director</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Years of Experience</label>
+              <input
+                name="Years_of_Experience"
+                type="number"
+                required
+                min="0"
+              />
+            </div>
+
+            <button type="submit">Predict Salary →</button>
+          </form>
+
+          <div id="result"></div>
+        </div>
+      </section>
+
+      <section id="analytics" style="display: none">
+        <h2 style="text-align: center">Model Insights</h2>
+
+        <div class="plots">
+          <div class="plot-card">
+            <img
+              src="data:image/png;base64,{{ plots['salary_distribution'] }}"
+            />
+          </div>
+          <div class="plot-card">
+            <img
+              src="data:image/png;base64,{{ plots['correlation_heatmap'] }}"
+            />
+          </div>
+          <div class="plot-card">
+            <img src="data:image/png;base64,{{ plots['salary_vs_age'] }}" />
+          </div>
+          <div class="plot-card">
+            <img
+              src="data:image/png;base64,{{ plots['salary_vs_experience'] }}"
+            />
+          </div>
+          <div class="plot-card">
+            <img
+              src="data:image/png;base64,{{ plots['actual_vs_predicted'] }}"
+            />
+          </div>
+          <div class="plot-card">
+            <img
+              src="data:image/png;base64,{{ plots['residuals_distribution'] }}"
+            />
+          </div>
+          <div class="plot-card">
+            <img
+              src="data:image/png;base64,{{ plots['salary_by_education'] }}"
+            />
+          </div>
+          <div class="plot-card">
+            <img src="data:image/png;base64,{{ plots['avg_salary_by_job'] }}" />
+          </div>
+        </div>
+      </section>
     </div>
 
     <script>
-      document.getElementById("salary-form").onsubmit = async function (e) {
+      const menuBtn = document.getElementById("menu-btn");
+      const sidebar = document.getElementById("sidebar");
+      const dashboard = document.getElementById("dashboard");
+      const analytics = document.getElementById("analytics");
+      const dashboardLink = document.getElementById("dashboard-link");
+      const analyticsLink = document.getElementById("analytics-link");
+      const resultDiv = document.getElementById("result");
+
+      // Toggle Sidebar
+      menuBtn.onclick = () => {
+        sidebar.classList.toggle("active");
+        menuBtn.classList.toggle("active");
+      };
+
+      // Helper to close sidebar & hamburger always
+      function closeSidebar() {
+        sidebar.classList.remove("active");
+        menuBtn.classList.remove("active");
+      }
+
+      // Navigation to Dashboard
+      dashboardLink.onclick = (e) => {
         e.preventDefault();
-        let formData = Object.fromEntries(new FormData(e.target).entries());
+        dashboard.style.display = "block";
+        analytics.style.display = "none";
+        dashboardLink.classList.add("active");
+        analyticsLink.classList.remove("active");
+        closeSidebar();
+      };
 
-        // Convert numeric fields
-        formData["Age"] = Number(formData["Age"]);
-        formData["Years_of_Experience"] = Number(
-          formData["Years_of_Experience"]
-        );
+      // Navigation to Analytics
+      analyticsLink.onclick = (e) => {
+        e.preventDefault();
+        dashboard.style.display = "none";
+        analytics.style.display = "block";
+        analyticsLink.classList.add("active");
+        dashboardLink.classList.remove("active");
+        closeSidebar();
+      };
 
-        // Validation by degree
+      // Prediction Handler
+      document.getElementById("salary-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = Object.fromEntries(new FormData(e.target).entries());
+        formData.Age = Number(formData.Age);
+        formData.Years_of_Experience = Number(formData.Years_of_Experience);
+
         const minAge = { "Bachelor's": 21, "Master's": 23, PhD: 26 };
-        if (
-          !formData["Age"] ||
-          !formData["Gender"] ||
-          !formData["Education_Level"] ||
-          !formData["Job_Title"] ||
-          formData["Years_of_Experience"] === ""
-        ) {
-          document.getElementById("result").textContent =
-            "Please fill all fields correctly.";
-          return;
-        }
-        if (formData["Age"] < minAge[formData["Education_Level"]]) {
-          document.getElementById("result").textContent = `Minimum age for ${
-            formData["Education_Level"]
-          } is ${minAge[formData["Education_Level"]]}.`;
-          return;
-        }
-        if (
-          formData["Years_of_Experience"] >
-          formData["Age"] - minAge[formData["Education_Level"]]
-        ) {
-          document.getElementById("result").textContent =
-            "Invalid input: experience exceeds allowed range.";
-          return;
+
+        if (formData.Age < minAge[formData.Education_Level]) {
+          return show(
+            `⚠️ Minimum age for ${formData.Education_Level} is ${
+              minAge[formData.Education_Level]
+            }.`
+          );
         }
 
-        // Make prediction
+        if (
+          formData.Years_of_Experience >
+          formData.Age - minAge[formData.Education_Level]
+        ) {
+          return show("⚠️ Experience exceeds realistic range.");
+        }
+
+        show("⏳ Predicting...");
+
         try {
-          let res = await fetch("/predict", {
+          const res = await fetch("/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
           });
-          let json = await res.json();
-          if (res.ok && json.predicted_salary !== undefined) {
-            document.getElementById("result").textContent =
-              "Predicted Salary: $" + json.predicted_salary;
-          } else if (json.error) {
-            document.getElementById("result").textContent =
-              "Error: " + json.error;
-          } else {
-            document.getElementById("result").textContent =
-              "Prediction failed. Try again.";
-          }
-        } catch (err) {
-          document.getElementById("result").textContent =
-            "Could not connect to server.";
+          const data = await res.json();
+          show(
+            `💰 Predicted Salary: $${data.predicted_salary.toLocaleString()}`
+          );
+        } catch {
+          show("❌ Server not reachable.");
         }
       };
+
+      function show(msg) {
+        resultDiv.textContent = msg;
+      }
     </script>
   </body>
 </html>
-
