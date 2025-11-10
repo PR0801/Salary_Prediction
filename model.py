@@ -21,7 +21,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 app = Flask(__name__)
 
 # Load Dataset (relative path - works everywhere)
-data = pd.read_csv(r"dataset/Salary_Data.csv")
+data = pd.read_csv(r"D:\PROGRAMMING\IBM_PBEL\SALARY_PREDICTION\DATASET\Salary_Data.csv")
 
 # Required columns check
 required_cols = ["Salary", "Age", "Gender", "Education Level", "Job Title", "Years of Experience"]
@@ -141,10 +141,18 @@ plots['salary_by_education'] = plot_to_base64(fig)
 plt.close(fig)
 
 # 8. Average Salary by Job Title
-avg_salary = data.groupby("Job Title")["Salary"].mean().sort_values()
-fig, ax = plt.subplots(figsize=(10, max(6, len(avg_salary) * 0.3)))
+avg_salary = (
+    data.groupby("Job Title")["Salary"]
+    .mean()
+    .sort_values(ascending=False)
+    .head(25)
+)
+
+fig, ax = plt.subplots(figsize=(10, max(6, len(avg_salary) * 0.4)))
 sns.barplot(x=avg_salary.values, y=avg_salary.index, ax=ax, palette="viridis")
-ax.set_title("Average Salary by Job Title")
+ax.set_title("Top 25 Job Titles by Average Salary")
+ax.set_xlabel("Average Salary")
+ax.set_ylabel("Job Title")
 plots['avg_salary_by_job'] = plot_to_base64(fig)
 plt.close(fig)
 
