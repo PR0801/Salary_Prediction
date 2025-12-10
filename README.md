@@ -103,7 +103,7 @@ Target variable: `Salary`
 ### Prerequisites
 
 * Python 3.x
-* Libraries: `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`, `flask`
+* Libraries: `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`, `flask`, 'joblib'
 * Install via `pip install -r requirements.txt`
 
 ### Steps
@@ -142,6 +142,7 @@ Salary_Prediction/
 │   └── Salary_Data.csv
 ├── template/
 │   └── index.html
+├── model.pkl
 ├── model.py            # main training + web app script
 ├── requirements.txt    # list of dependencies
 ├── README.md           # this file
