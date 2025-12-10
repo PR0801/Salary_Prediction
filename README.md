@@ -30,7 +30,7 @@ Given an employee’s information (age, gender, education level, job title, year
 
 ## Dataset
 
-* Kaggle Link-https://www.kaggle.com/datasets/mubeenshehzadi/salary-dataset
+* Kaggle Link-[https://www.kaggle.com/datasets/mubeenshehzadi/salary-dataset](https://www.kaggle.com/datasets/rkiattisak/salaly-prediction-for-beginer)
 * The dataset used is derived from a public source (e.g., Kaggle) containing salary data along with relevant features.
 * Example features include: Salary (target), Age, Gender, Education Level, Job Title, Years of Experience (and optionally Location).
 * Rows with missing values in required columns are dropped to maintain clean data for modelling.
