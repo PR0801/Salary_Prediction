@@ -142,9 +142,10 @@ Salary_Prediction/
 │   └── Salary_Data.csv
 ├── template/
 │   └── index.html
-├── model.pkl
+├── model.pkl           #Trained  Model
 ├── model.py            # main training + web app script
 ├── requirements.txt    # list of dependencies
+├── Salary_Prediction_Presentation.pdf #PPT
 ├── README.md           # this file
 └── … (other files) …
 ```
