@@ -113,7 +113,7 @@ Target variable: `Salary`
 3. Adjust file paths in the script if needed.
 4. Run the main script (e.g., `python datatrain.py`).
    * The model will train, print evaluation metrics
-5. Run the app script (e.g.,  'python app.py')
+5. Run the app script (e.g., `python app.py`)
    * This will start the Flask web server (e.g., at `http://127.0.0.1:5000`).
 5. Navigate to the home page to see the visualisations and use the prediction form.
 6. For prediction via API: send a POST request to `/predict` endpoint with JSON payload:
