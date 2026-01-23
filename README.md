@@ -111,9 +111,10 @@ Target variable: `Salary`
 1. Clone/download the repository.
 2. Place the dataset (`Salary_Data.csv`) under the `DATASET/` folder (or update the path accordingly).
 3. Adjust file paths in the script if needed.
-4. Run the main script (e.g., `python model.py` or `python app.py`).
-
-   * The model will train, print evaluation metrics, and start the Flask web server (e.g., at `http://127.0.0.1:5000`).
+4. Run the main script (e.g., `python datatrain.py`).
+   * The model will train, print evaluation metrics
+5. Run the app script (e.g.,  'python app.py')
+   * This will start the Flask web server (e.g., at `http://127.0.0.1:5000`).
 5. Navigate to the home page to see the visualisations and use the prediction form.
 6. For prediction via API: send a POST request to `/predict` endpoint with JSON payload:
 
@@ -139,11 +140,12 @@ Response will include:
 Salary_Prediction/
 │
 ├── DATASET/
-│   └── Salary_Data.csv
+│   └── Salary_Data.csv #dataset
 ├── template/
-│   └── index.html
+│   └── index.html      #frontend
 ├── model.pkl           #Trained  Model
-├── model.py            # main training + web app script
+├── datatrain.py        #model training script
+├──app.py               #script to run flask app  
 ├── requirements.txt    # list of dependencies
 ├── Salary_Prediction_Presentation.pdf #PPT
 ├── README.md           # this file
