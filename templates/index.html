@@ -86,38 +86,15 @@
       .content {
         padding: 40px;
       }
-      .stats{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-        gap:20px;
-        margin-bottom:30px;
-      }
-      .stat-card{
-        background:rgba(255,255,255,.08);
-        backdrop-filter:blur(20px);
-        border-radius:16px;
-        padding:20px;
-        text-align:center;
-        border:1px solid rgba(255,255,255,.1);
-      }
-      .stat-card h3{
-        margin:0;
-        font-size:30px;
-        color:#38bdf8;
-      }
-      .stat-card p{
-        margin-top:10px;
-        color:#cbd5e1;
-      }
       .panel {
-        max-width: 480px;
+        max-width: 650px;
         margin: auto;
         background: rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
-        backdrop-filter: blur(16px);
-        padding: 35px;
+        border-radius: 24px;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,.1);
+        padding: 40px;
       }
-
       header h1,
       .panel h2,
       h2 {
@@ -160,38 +137,44 @@
         color: white !important;
       }
       button{
-        background:linear-gradient(      
-          135deg,      
-          #6366f1,      
-          #38bdf8
-        );
-        border-radius:14px;
-        padding:16px;
-        font-weight:700;
-        font-size:18px;  
-        cursor:pointer;  
-        color:white;  
-        border:none;  
-        transition:.3s;      }
-      button:hover{  
-        transform:translateY(-3px);
-  
-        box-shadow:      
-          0 10px 30px
-          rgba(56,189,248,.4);
-      }
+  background:linear-gradient(
+      135deg,
+      #6366f1,
+      #38bdf8
+  );
 
-      #result{
-        margin-top:20px;  
-        padding:20px; 
-        border-radius:16px;  
-        text-align:center;  
-        font-size:22px; 
+  border:none;
+  border-radius:14px;
+
+  padding:16px;
+
+  font-size:18px;
+  font-weight:700;
+
+  color:white;
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 10px 30px
+    rgba(56,189,248,.4);
+}
+
+     #result{
+        margin-top:20px;
+        padding:18px;
+        border-radius:14px;
+        text-align:center;
+        font-size:24px;
         font-weight:700;
         background:rgba(255,255,255,.08);
         backdrop-filter:blur(20px);
-        min-height:30px;
-      }
+    }
 
       /* ✅ SHOW GRAPHS IN 2 PER ROW */
       .plots {
@@ -214,19 +197,22 @@
       }
 
       /* ✅ INCREASE GRAPH SIZE */
-      .plot-card{
-        padding:14px;
-        background:
-          rgba(255,255,255,.08);
-        border-radius:18px;
-        transition:.3s;
-      }
-      .plot-card:hover{
-        transform:translateY(-8px);
-        box-shadow:
-          0 20px 40px
-          rgba(0,0,0,.25);
-      }
+     .plot-card{
+  padding:14px;
+  background:rgba(255,255,255,.08);
+
+  border-radius:18px;
+
+  transition:.3s;
+}
+
+.plot-card:hover{
+  transform:translateY(-8px);
+
+  box-shadow:
+      0 20px 40px
+      rgba(0,0,0,.25);
+}
       .plot-card img {
         width: 100%;
         height: 320px;
@@ -252,17 +238,6 @@
       <a href="#" id="dashboard-link" class="active">🏠 Dashboard</a>
       <a href="#" id="analytics-link">📊 Analytics</a>
     </div>
-<div class="stat-card">
-        <h3>500+</h3>
-        <p>Salary Records</p>
-      </div>
-
-      <div class="stat-card">
-        <h3>32</h3>
-        <p>Job Roles</p>
-      </div>
-    </div>
-
     <div class="panel">
       <h2>Predict Salary</h2>
       <h3>Enter details to get Salary estimate</h3>
