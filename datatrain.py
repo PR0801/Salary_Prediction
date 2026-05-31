@@ -13,7 +13,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 # ---------------- PATHS ----------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "DATASET", "Salary_Data.csv")
+DATA_PATH = os.path.join(BASE_DIR, "dataset", "Salary_Data.csv")
 MODEL_FILE = os.path.join(BASE_DIR, "model.pkl")
 # ---------------- LOAD DATA ----------------
 data = pd.read_csv(DATA_PATH)
