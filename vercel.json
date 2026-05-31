@@ -1,24 +1,15 @@
-try {
-    const response = await fetch("/predict", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-    });
-
-    const data = await response.json();
-
-    console.log(data);
-
-    if (!response.ok) {
-        show("❌ " + data.error);
-        return;
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
     }
-
-    show(`💰 Predicted Salary: $${data.predicted_salary}`);
-
-} catch (err) {
-    console.error(err);
-    show("❌ " + err.message);
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ]
 }
