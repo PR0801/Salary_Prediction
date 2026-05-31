@@ -402,41 +402,18 @@ document.getElementById("salary-form").onsubmit = async (e) => {
 
     show("⏳ Predicting...");
 
-    try {
-
-        const response = await fetch("/predict", {
+   try {
+        const res = await fetch("/predict", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
         });
-
-        const data = await response.json();
-
-        console.log("Status:", response.status);
-        console.log("Response:", data);
-
-        if (!response.ok) {
-            throw new Error(
-                data.error || "Prediction failed"
-            );
-        }
-
+        const data = await res.json();
         show(
-            `💰 Predicted Salary: $${Number(
-                data.predicted_salary
-            ).toLocaleString()}`
+            `💰 Predicted Salary: $${data.predicted_salary.toLocaleString()}`
         );
-
-    } catch (err) {
-
-        console.error(err);
-
-        show(
-            "❌ Prediction failed: " +
-            err.message
-        );
+    } catch {
+        show("❌ Server not reachable.");
     }
 };
       function show(msg) {
