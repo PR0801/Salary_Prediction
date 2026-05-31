@@ -1,4 +1,3 @@
-```python
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -232,4 +231,3 @@ joblib.dump(
 )
 
 print(f"Model saved at: {MODEL_FILE}")
-```
