@@ -2,89 +2,129 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import os
-import base64
-from io import BytesIO
+import joblib
+import pandas as pd
 
 import matplotlib
 matplotlib.use("Agg")
-
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import joblib
 
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "dataset", "Salary_Data.csv")
-MODEL_FILE = os.path.join(BASE_DIR, "model.pkl")
 
-if not os.path.exists(DATA_PATH):
-    raise FileNotFoundError(f"Dataset not found: {DATA_PATH}")
+DATA_PATH = os.path.join(
+    BASE_DIR,
+    "dataset",
+    "Salary_Data.csv"
+)
 
-if not os.path.exists(MODEL_FILE):
-    raise FileNotFoundError(f"Model not found: {MODEL_FILE}")
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "model.pkl"
+)
 
-data = pd.read_csv(DATA_PATH)
-model = joblib.load(MODEL_FILE)
+# ---------------- LOAD ----------------
 
-def plot_to_base64(fig):
-    buf = BytesIO()
-    fig.savefig(buf, format="png", bbox_inches="tight")
-    buf.seek(0)
-    img = base64.b64encode(buf.getvalue()).decode("utf-8")
-    buf.close()
-    return img
+try:
 
-def generate_plots():
-    plots = {}
-    sns.set_style("whitegrid")
+    model = joblib.load(MODEL_PATH)
 
-    fig, ax = plt.subplots()
-    sns.histplot(data["Salary"], bins=20, kde=True, ax=ax)
-    plots["salary_distribution"] = plot_to_base64(fig)
-    plt.close(fig)
+    print("✅ Model Loaded")
 
-    fig, ax = plt.subplots()
-    corr = data[["Salary", "Age", "Years of Experience"]].corr(numeric_only=True)
-    sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
-    plots["correlation_heatmap"] = plot_to_base64(fig)
-    plt.close(fig)
+except Exception as e:
 
-    return plots
+    print("❌ MODEL ERROR:", e)
+
+    raise
+
+try:
+
+    dataset = pd.read_csv(DATA_PATH)
+
+    print("✅ Dataset Loaded")
+
+except Exception as e:
+
+    print("❌ DATA ERROR:", e)
+
+    raise
+
+
+# ---------------- HOME ----------------
 
 @app.route("/")
 def home():
-    plots = generate_plots()
-    return render_template("index.html", plots=plots)
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    try:
-        data_json = request.get_json()
+    return render_template(
+        "index.html",
+        plots={}
+    )
 
-        df = pd.DataFrame([{
-            "Age": float(data_json["Age"]),
-            "Gender": data_json["Gender"],
-            "Education Level": data_json["Education_Level"],
-            "Job Title": data_json["Job_Title"],
-            "Years of Experience": float(data_json["Years_of_Experience"])
-        }])
 
-        prediction = model.predict(df)[0]
-
-        return jsonify({
-            "predicted_salary": round(float(prediction), 2)
-        })
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+# ---------------- HEALTH ----------------
 
 @app.route("/health")
 def health():
-    return jsonify({"status": "healthy"})
+
+    return jsonify({
+        "status": "healthy"
+    })
+
+
+# ---------------- PREDICT ----------------
+
+@app.route("/predict", methods=["POST"])
+def predict():
+
+    try:
+
+        payload = request.get_json(force=True)
+
+        print("Incoming:", payload)
+
+        df = pd.DataFrame([{
+            "Age": float(payload["Age"]),
+            "Gender": payload["Gender"],
+            "Education Level":
+                payload["Education_Level"],
+            "Job Title":
+                payload["Job_Title"],
+            "Years of Experience":
+                float(
+                    payload[
+                        "Years_of_Experience"
+                    ]
+                )
+        }])
+
+        prediction = model.predict(df)
+
+        salary = float(prediction[0])
+
+        return jsonify({
+            "predicted_salary": salary
+        })
+
+    except Exception as e:
+
+        print(
+            "❌ PREDICTION ERROR:",
+            str(e)
+        )
+
+        return jsonify({
+            "error": str(e)
+        }), 500
+
+
+# ---------------- MAIN ----------------
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False
+    )
