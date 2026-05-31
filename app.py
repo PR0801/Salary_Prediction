@@ -14,7 +14,7 @@ import os
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "DATASET", "Salary_Data.csv")
+DATA_PATH = os.path.join(BASE_DIR, "dataset", "Salary_Data.csv")
 MODEL_FILE = os.path.join(BASE_DIR, "model.pkl")
 
 # ---------------- LOAD MODEL & DATA ----------------
