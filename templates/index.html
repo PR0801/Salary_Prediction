@@ -26,33 +26,44 @@
       header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         padding: 20px 30px;
         background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
+      /* ✅ FIXED: Hamburger animation using .open class */
       .menu-btn {
         width: 32px;
         height: 22px;
         position: relative;
         cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
       }
       .menu-btn span {
         position: absolute;
         width: 100%;
         height: 3px;
         background: white;
+        border-radius: 2px;
         transition: 0.3s ease;
       }
-      .menu-btn span:nth-child(1) {
-        top: 0;
+      .menu-btn span:nth-child(1) { top: 0; }
+      .menu-btn span:nth-child(2) { top: 9px; }
+      .menu-btn span:nth-child(3) { bottom: 0; }
+
+      /* Animate to X when sidebar is open */
+      .menu-btn.open span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
       }
-      .menu-btn span:nth-child(2) {
-        top: 9px;
+      .menu-btn.open span:nth-child(2) {
+        opacity: 0;
       }
-      .menu-btn span:nth-child(3) {
-        bottom: 0;
+      .menu-btn.open span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
       }
 
       .sidebar {
@@ -61,10 +72,12 @@
         top: 0;
         height: 100%;
         width: 250px;
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(15, 23, 42, 0.95);
         backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255,255,255,0.08);
         transition: 0.4s ease;
         padding-top: 80px;
+        z-index: 100;
       }
       .sidebar.active {
         left: 0;
@@ -83,9 +96,11 @@
         border-left-color: var(--accent);
       }
 
+      /* ✅ FIXED: Added content wrapper */
       .content {
         padding: 40px;
       }
+
       .panel {
         max-width: 650px;
         margin: auto;
@@ -95,6 +110,7 @@
         border: 1px solid rgba(255,255,255,.1);
         padding: 40px;
       }
+
       header h1,
       .panel h2,
       h2 {
@@ -103,18 +119,22 @@
         -webkit-background-clip: text;
         color: transparent;
         -webkit-text-fill-color: transparent;
+        margin: 0;
       }
 
       form {
         display: grid;
         gap: 18px;
+        margin-top: 20px;
       }
       .form-group {
         display: flex;
         flex-direction: column;
+        gap: 6px;
       }
       label {
         color: #cbd5e1;
+        font-size: 14px;
       }
 
       input,
@@ -124,9 +144,14 @@
         border: 1px solid rgba(255, 255, 255, 0.15);
         background: rgba(255, 255, 255, 0.15);
         color: white;
+        font-family: "Outfit", sans-serif;
+        font-size: 15px;
+      }
+      input:focus, select:focus {
+        outline: none;
+        border-color: var(--accent);
       }
 
-      /* FIX DROPDOWN VISIBILITY */
       select option {
         background: #1e293b !important;
         color: #f8fafc !important;
@@ -136,47 +161,49 @@
         background: #3b82f6 !important;
         color: white !important;
       }
-      button{
-  background:linear-gradient(
-      135deg,
-      #6366f1,
-      #38bdf8
-  );
 
-  border:none;
-  border-radius:14px;
+      button {
+        background: linear-gradient(135deg, #6366f1, #38bdf8);
+        border: none;
+        border-radius: 14px;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        cursor: pointer;
+        transition: .3s;
+        font-family: "Outfit", sans-serif;
+      }
+      button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(56,189,248,.4);
+      }
 
-  padding:16px;
+      #result {
+        margin-top: 20px;
+        padding: 18px;
+        border-radius: 14px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+        background: rgba(255,255,255,.08);
+        backdrop-filter: blur(20px);
+        display: none; /* hidden until there's a result */
+      }
+      #result.visible {
+        display: block;
+      }
 
-  font-size:18px;
-  font-weight:700;
+      /* Analytics section */
+      .stat-card {
+        max-width: 900px;
+        margin: 0 auto 30px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 20px 30px;
+        border: 1px solid rgba(255,255,255,0.1);
+      }
 
-  color:white;
-  cursor:pointer;
-
-  transition:.3s;
-}
-
-button:hover{
-  transform:translateY(-3px);
-
-  box-shadow:
-    0 10px 30px
-    rgba(56,189,248,.4);
-}
-
-     #result{
-        margin-top:20px;
-        padding:18px;
-        border-radius:14px;
-        text-align:center;
-        font-size:24px;
-        font-weight:700;
-        background:rgba(255,255,255,.08);
-        backdrop-filter:blur(20px);
-    }
-
-      /* ✅ SHOW GRAPHS IN 2 PER ROW */
       .plots {
         display: grid;
         gap: 24px;
@@ -186,51 +213,42 @@ button:hover{
         margin-right: auto;
       }
       @media (min-width: 500px) {
-        .plots {
-          grid-template-columns: repeat(2, 1fr);
-        }
+        .plots { grid-template-columns: repeat(2, 1fr); }
       }
       @media (max-width: 499px) {
-        .plots {
-          grid-template-columns: 1fr;
-        }
+        .plots { grid-template-columns: 1fr; }
       }
 
-      /* ✅ INCREASE GRAPH SIZE */
-     .plot-card{
-  padding:14px;
-  background:rgba(255,255,255,.08);
-
-  border-radius:18px;
-
-  transition:.3s;
-}
-
-.plot-card:hover{
-  transform:translateY(-8px);
-
-  box-shadow:
-      0 20px 40px
-      rgba(0,0,0,.25);
-}
+      .plot-card {
+        padding: 14px;
+        background: rgba(255,255,255,.08);
+        border-radius: 18px;
+        transition: .3s;
+      }
+      .plot-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,.25);
+      }
       .plot-card img {
         width: 100%;
         height: 320px;
         object-fit: contain;
       }
-      footer{  
-        text-align:center;  
-        padding:30px;  
-        color:#94a3b8;
+
+      footer {
+        text-align: center;
+        padding: 30px;
+        color: #94a3b8;
       }
     </style>
   </head>
 
   <body>
     <header>
-      <div class="menu-btn" id="menu-btn">
+      <!-- ✅ FIXED: button element for accessibility, open class for animation -->
+      <button class="menu-btn" id="menu-btn" aria-label="Toggle menu">
         <span></span><span></span><span></span>
-      </div>
+      </button>
       <h1>Salary Predictor</h1>
     </header>
 
@@ -238,16 +256,21 @@ button:hover{
       <a href="#" id="dashboard-link" class="active">🏠 Dashboard</a>
       <a href="#" id="analytics-link">📊 Analytics</a>
     </div>
-    <div class="panel">
-      <h2>Predict Salary</h2>
-      <h3>Enter details to get Salary estimate</h3>
 
-      <form id="salary-form">
+    <!-- ✅ FIXED: content wrapper added; sections properly structured with IDs -->
+    <div class="content">
 
-        <div class="form-group">
-          <label>Age</label>
-          <input name="Age" type="number" required min="18" />
-        </div>
+      <!-- DASHBOARD SECTION -->
+      <section id="dashboard">
+        <div class="panel">
+          <h2>Predict Salary</h2>
+          <h3 style="color:#94a3b8; font-weight:400; margin-top:8px;">Enter details to get a salary estimate</h3>
+
+          <form id="salary-form">
+            <div class="form-group">
+              <label>Age</label>
+              <input name="Age" type="number" required min="18" placeholder="e.g. 28" />
+            </div>
 
             <div class="form-group">
               <label>Gender</label>
@@ -272,7 +295,6 @@ button:hover{
               <label>Job Title</label>
               <select name="Job_Title" required>
                 <option value="" disabled selected>Select job</option>
-
                 <option>Customer Service Rep</option>
                 <option>Data Analyst</option>
                 <option>Director</option>
@@ -307,14 +329,10 @@ button:hover{
                 <option>Software Engineer</option>
               </select>
             </div>
+
             <div class="form-group">
               <label>Years of Experience</label>
-              <input
-                name="Years_of_Experience"
-                type="number"
-                required
-                min="0"
-              />
+              <input name="Years_of_Experience" type="number" required min="0" placeholder="e.g. 5" />
             </div>
 
             <button type="submit">Predict Salary →</button>
@@ -324,79 +342,67 @@ button:hover{
         </div>
       </section>
 
-      <section id="analytics" style="display: none">
-        <h2 style="text-align: center">Model Insights</h2>
-        <div class="stat-card" style="margin-bottom:30px;">
-          <h3>Voting Regressor</h3>
-          <p>    
-            Linear Regression +    
-            Random Forest +    
-            Gradient Boosting
+      <!-- ANALYTICS SECTION -->
+      <section id="analytics" style="display: none;">
+        <h2 style="text-align: center; margin-bottom: 20px;">Model Insights</h2>
+
+        <div class="stat-card">
+          <h3 style="margin:0 0 8px;">Voting Regressor</h3>
+          <p style="margin:0; color:#94a3b8;">
+            Linear Regression + Random Forest + Gradient Boosting
           </p>
         </div>
+
         <div class="plots">
           <div class="plot-card">
-            <img
-              src="data:image/png;base64,{{ plots['salary_distribution'] }}"
-            />
+            <img src="data:image/png;base64,{{ plots['salary_distribution'] }}" alt="Salary Distribution" />
           </div>
           <div class="plot-card">
-            <img
-              src="data:image/png;base64,{{ plots['correlation_heatmap'] }}"
-            />
+            <img src="data:image/png;base64,{{ plots['correlation_heatmap'] }}" alt="Correlation Heatmap" />
           </div>
           <div class="plot-card">
-            <img src="data:image/png;base64,{{ plots['salary_vs_age'] }}" />
+            <img src="data:image/png;base64,{{ plots['salary_vs_age'] }}" alt="Salary vs Age" />
           </div>
           <div class="plot-card">
-            <img
-              src="data:image/png;base64,{{ plots['salary_vs_experience'] }}"
-            />
+            <img src="data:image/png;base64,{{ plots['salary_vs_experience'] }}" alt="Salary vs Experience" />
           </div>
           <div class="plot-card">
-            <img
-              src="data:image/png;base64,{{ plots['actual_vs_predicted'] }}"
-            />
+            <img src="data:image/png;base64,{{ plots['actual_vs_predicted'] }}" alt="Actual vs Predicted" />
           </div>
           <div class="plot-card">
-            <img
-              src="data:image/png;base64,{{ plots['residuals_distribution'] }}"
-            />
+            <img src="data:image/png;base64,{{ plots['residuals_distribution'] }}" alt="Residuals Distribution" />
           </div>
           <div class="plot-card">
-            <img
-              src="data:image/png;base64,{{ plots['salary_by_education'] }}"
-            />
+            <img src="data:image/png;base64,{{ plots['salary_by_education'] }}" alt="Salary by Education" />
           </div>
           <div class="plot-card">
-            <img src="data:image/png;base64,{{ plots['avg_salary_by_job'] }}" />
+            <img src="data:image/png;base64,{{ plots['avg_salary_by_job'] }}" alt="Avg Salary by Job" />
           </div>
         </div>
       </section>
-    </div>
+
+    </div><!-- end .content -->
 
     <script>
-      const menuBtn = document.getElementById("menu-btn");
-      const sidebar = document.getElementById("sidebar");
-      const dashboard = document.getElementById("dashboard");
-      const analytics = document.getElementById("analytics");
+      const menuBtn       = document.getElementById("menu-btn");
+      const sidebar       = document.getElementById("sidebar");
+      const dashboard     = document.getElementById("dashboard");
+      const analytics     = document.getElementById("analytics");
       const dashboardLink = document.getElementById("dashboard-link");
       const analyticsLink = document.getElementById("analytics-link");
-      const resultDiv = document.getElementById("result");
+      const resultDiv     = document.getElementById("result");
 
-      // Toggle Sidebar
+      // ✅ FIXED: toggle both sidebar and hamburger .open class together
       menuBtn.onclick = () => {
         sidebar.classList.toggle("active");
-        menuBtn.classList.toggle("active");
+        menuBtn.classList.toggle("open");
       };
 
-      // Helper to close sidebar & hamburger always
       function closeSidebar() {
         sidebar.classList.remove("active");
-        menuBtn.classList.remove("active");
+        menuBtn.classList.remove("open");
       }
 
-      // Navigation to Dashboard
       dashboardLink.onclick = (e) => {
         e.preventDefault();
         dashboard.style.display = "block";
@@ -406,7 +412,6 @@ button:hover{
         closeSidebar();
       };
 
-      // Navigation to Analytics
       analyticsLink.onclick = (e) => {
         e.preventDefault();
         dashboard.style.display = "none";
@@ -417,54 +422,47 @@ button:hover{
       };
 
       // Prediction Handler
-document.getElementById("salary-form").onsubmit = async (e) => {
-    e.preventDefault();
+      document.getElementById("salary-form").onsubmit = async (e) => {
+        e.preventDefault();
 
-    const formData = Object.fromEntries(
-        new FormData(e.target).entries()
-    );
+        const formData = Object.fromEntries(new FormData(e.target).entries());
+        formData.Age = Number(formData.Age);
+        formData.Years_of_Experience = Number(formData.Years_of_Experience);
 
-    formData.Age = Number(formData.Age);
-    formData.Years_of_Experience =
-        Number(formData.Years_of_Experience);
+        const minAge = {
+          "Bachelor's": 21,
+          "Master's": 23,
+          "PhD": 26
+        };
 
-    const minAge = {
-        "Bachelor's": 21,
-        "Master's": 23,
-        "PhD": 26
-    };
+        if (formData.Age < minAge[formData.Education_Level]) {
+          show(`⚠️ Minimum age for ${formData.Education_Level} is ${minAge[formData.Education_Level]}`);
+          return;
+        }
 
-    if (formData.Age < minAge[formData.Education_Level]) {
-        show(
-            `⚠️ Minimum age for ${formData.Education_Level} is ${
-                minAge[formData.Education_Level]
-            }`
-        );
-        return;
-    }
+        show("⏳ Predicting...");
 
-    show("⏳ Predicting...");
-
-   try {
-        const res = await fetch("/predict", {
+        try {
+          const res  = await fetch("/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-        show(
-            `💰 Predicted Salary: $${data.predicted_salary.toLocaleString()}`
-        );
-    } catch {
-        show("❌ Server not reachable.");
-    }
-};
+          });
+          const data = await res.json();
+          show(`💰 Predicted Salary: $${data.predicted_salary.toLocaleString()}`);
+        } catch {
+          show("❌ Server not reachable.");
+        }
+      };
+
       function show(msg) {
         resultDiv.textContent = msg;
+        resultDiv.classList.add("visible");
       }
     </script>
+
     <footer>
-      AI Salary Predictor • Built with Flask & Machine Learning © Pratyush Raunak
+      AI Salary Predictor • Built with Flask &amp; Machine Learning © Pratyush Raunak
     </footer>
   </body>
 </html>
