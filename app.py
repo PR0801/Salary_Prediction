@@ -149,8 +149,6 @@ print(
     f"Model trained successfully | R² = "
     f"{r2_score(y_test, y_pred):.4f}"
 )
-
-```python
 # ---------------- PLOTS ----------------
 
 def plot_to_base64(fig):
@@ -303,7 +301,7 @@ plots["avg_salary_by_job"] = plot_to_base64(fig)
 plt.close(fig)
 
 print("Generated plots:", list(plots.keys()))
-```
+
 
 
 # ---------------- ROUTES ----------------
